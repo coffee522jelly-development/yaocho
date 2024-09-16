@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roulette Simulation</title>
+    <style>
+        #roulette {
+            font-size: 12em;
+            text-align: center;
+            margin-top: 50px;
+            color: rgb(73, 133, 236);
+        }
+        #spinButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 1.5em;
+        }
+        #stopButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 1.5em;
+        }
+        html {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          overflow: hidden;
+          background: radial-gradient(circle, rgba(30,30,60,1) 0%, rgba(10,10,30,1) 100%);
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="roulette">-</div>
+    <!-- <button id="spinButton">スタート</button>
+    <button id="stopButton">ストップ</button> -->
+
+    <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const items = ["木村", "中野", "長友", "中村"];
+        const roulette = document.getElementById('roulette');
+        let spinning = false;
+        let spinInterval;
+
+        spin();
+        setTimeout(stop, 5000);
+
+        function spin() {
+        if (spinning) return;
+        spinning = true;
+        let currentIndex = 0;
+
+        let colors = ["#20AEE5", "#f09199"]; // 交互に使う色
+
+        spinInterval = setInterval(() => {
+            const previousIndex = (currentIndex - 1 + items.length) % items.length;
+            const nextIndex = (currentIndex + 1) % items.length;
+
+            // 各行に異なる色を適用
+            roulette.innerHTML = `
+                <span style="color:${colors[0]}">${items[previousIndex]}</span><br>
+                <span style="color:${colors[1]}">${items[currentIndex]}</span><br>
+                <span style="color:${colors[0]}">${items[nextIndex]}</span>
+            `;
+
+            currentIndex = (currentIndex + 1) % items.length;
+
+            // colorsの値を反転
+            [colors[0], colors[1]] = [colors[1], colors[0]];
+
+        }, 100);
+    }
+
+    function stop() {
+        clearInterval(spinInterval);
+        
+        const target = "木村";
+        const targetIndex = items.indexOf(target);
+
+        let colors = ["#20AEE5", "#f09199"]; // spin関数で使用していた色
+
+        if (targetIndex !== -1) {
+            // +90kgの前後のインデックスを計算
+            const previousIndex = (targetIndex - 1 + items.length) % items.length;
+            const nextIndex = (targetIndex + 1) % items.length;
+
+            // 前後の値と+90kgを改行して表示（色を適用）
+            roulette.innerHTML = `
+                <span style="color:${colors[0]}">${items[previousIndex]}</span><br>
+                <span id="targetText" style="color:${colors[1]}">${items[targetIndex]}</span><br>
+                <span style="color:${colors[0]}">${items[nextIndex]}</span>
+            `;
+
+            // 色を反転
+            [colors[0], colors[1]] = [colors[1], colors[0]];
+
+            // targetIndexのテキストを拡大
+            scale("targetText");
+        } else {
+            // +90kgが見つからない場合は、デフォルトで木村を表示
+            roulette.innerHTML = `<span style="color:${colors[1]}" id="targetText">木村</span>`;
+            scale("targetText");
+        }
+
+        spinning = false;
+    }
+
+    // 文字を拡大する関数
+    function scale(elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.style.transform = "scale(1.5)";           // 拡大率1.5倍
+            element.style.transition = "transform 0.5s ease"; // スムーズに拡大
+        }
+    }
+  });
+    </script>
+</body>
+</html>
