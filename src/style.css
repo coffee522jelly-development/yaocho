@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap');
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to bottom, #00184f, #0d255e, #19326e, #24407d, #2f4e8d, #2e4d8c, #2e4b8b, #2d4a8a, #213878, #152766, #071754, #000342);
+    font-family: "Zen Kaku Gothic New", sans-serif;
+}
+
+.roulette-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 800px; /* 視点の調整 */
+}
+
+.roulette {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* 円筒の幅 */
+    height: 100%; /* 円筒の高さ */
+    transform-style: preserve-3d;
+    animation: spin 1s linear infinite; /* 1秒で無限回転 */
+    transition: transform 0.5s ease-in-out; /* 回転のトランジションを追加 */
+}
+
+.name {
+    position: absolute; /* 絶対位置に設定 */
+    width: 100%; /* 幅を円筒に合わせる */
+    height: 500px; /* 名前の高さ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6rem;
+    color: white;
+    backface-visibility: hidden; /* 背面を非表示にする */
+}
+
+/* 名前を円筒の表面に配置 */
+#name1 { transform: rotateX(0deg) translateZ(500px); color:#f09199;}
+#name2 { transform: rotateX(36deg) translateZ(500px); color:#20AEE5;}
+#name3 { transform: rotateX(72deg) translateZ(500px); color:#f09199;}
+#name4 { transform: rotateX(108deg) translateZ(500px); color:#20AEE5;}
+#name5 { transform: rotateX(144deg) translateZ(500px); color:#f09199;}
+#name6 { transform: rotateX(180deg) translateZ(500px); color:#20AEE5;}
+#name7 { transform: rotateX(216deg) translateZ(500px); color:#f09199;}
+#name8 { transform: rotateX(252deg) translateZ(500px); color:#20AEE5;}
+#name9 { transform: rotateX(288deg) translateZ(500px); color:#f09199;}
+#name10 { transform: rotateX(324deg) translateZ(500px); color:#20AEE5;}
+
+.winner {
+    font-size: 12rem;
+    transition: font-size 1.5s ease; /* イージングを追加 */
+}
+
+/* Spin animation */
+@keyframes spin {
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(-360deg); } /* X軸で回転 */
+}
