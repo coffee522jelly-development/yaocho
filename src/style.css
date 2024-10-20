@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap');
-
 body, html {
     margin: 0;
     padding: 0;
@@ -8,8 +6,24 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(to bottom, #00184f, #0d255e, #19326e, #24407d, #2f4e8d, #2e4d8c, #2e4b8b, #2d4a8a, #213878, #152766, #071754, #000342);
-    font-family: "Zen Kaku Gothic New", sans-serif;
+    background: linear-gradient(to bottom, rgb(8, 9, 51), rgb(43, 58, 78), rgb(8, 9, 51));
+    font-weight: bolder;
+}
+
+#title {
+  /* 親要素に display: flex と justify-content: center を設定 */
+  display: flex;
+  justify-content: center;
+}
+
+#title-child {
+    color: white;
+}
+
+.title {
+    font-size: 8em;
+    text-align: center;
+    width: 100%;
 }
 
 .roulette-container {
@@ -38,7 +52,7 @@ body, html {
 .name {
     position: absolute; /* 絶対位置に設定 */
     width: 100%; /* 幅を円筒に合わせる */
-    height: 500px; /* 名前の高さ */
+    height: 50%; /* 名前の高さ */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,6 +76,34 @@ body, html {
 .winner {
     font-size: 12rem;
     transition: font-size 1.5s ease; /* イージングを追加 */
+}
+
+.fadeout { 
+    animation: fadeOut 4s;
+}
+
+/* フェードアウト*/
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.fadein { 
+    animation: fadeIn 3s;
+}
+
+/* フェードイン*/
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Spin animation */
