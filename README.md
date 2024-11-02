@@ -2,17 +2,26 @@
 
 typescript+Viteの構成
 
-Viteをお使いの場合は、下記コマンドで
+Viteを使う場合下記コマンドで
 以下のような検証ができます。
 
 my-roulette-appのディレクトリで
-npm run dev　
+```
+npm run dev
+```
 →デバッグ実行
 
 my-roulette-appのディレクトリで
+```
 npm run build
+```
 →リリース実行
 
 my-roulette-appのディレクトリで
+```
 serve -s dist
-→dist下のローカル検証ができる
+```
+もしくは、npm run preview
+
+dist下のローカル検証ができる
+(プロダクションビルドの問題がないかを確認できる。)
