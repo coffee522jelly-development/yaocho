@@ -1,5 +1,4 @@
-// ルーレット関数の公開
-export function startRoulette()
+export function startRoulette() 
 {
     console.log("Roulette started!");
 
@@ -8,130 +7,151 @@ export function startRoulette()
 }
 
 // タイトルの初期化
-function InitTitle()
+function InitTitle() 
 {
     transitionTitle();
 }
 
-function transitionTitle(){
-    // 4秒後にタイトルを消して、ルーレットを開始
-    setTimeout(() => {
-        const titleDiv = document.getElementById('title');
-        
-        if (titleDiv) 
-        {
-            // タイトル要素を非表示にする
-            titleDiv.style.display = 'none';
-        }
 
-        // ルーレットをスタート
+// タイトルの経過表示
+function transitionTitle() 
+{
+    setTimeout(() => {
+
+        // タイトルの非表示
+        const titleDiv: HTMLElement | null = document.getElementById('title');
+        if (titleDiv)
+            titleDiv.style.display = 'none';
+
+        // ルーレットの開始
         GenerateRoulette();
-    }, 3800); // 約4秒
+    }, 6000);
 }
 
 
 // ルーレットの生成
-function GenerateRoulette()
+function GenerateRoulette() 
 {
-    const namesArray: string[] = [
-        "木 村", // 当選者
-        "中 野",
-        "西 村",
-        "長 友",
-        "中 村",
-        "木 村",
-        "中 野",
-        "西 村",
-        "長 友",
-        "中 村"
-    ];
+    // 最大10人まで対応
+    const strTarget: string  = "木 村";
 
-    // div要素を作成
+    let aryNames: string[] = []; // 空の配列を準備
+
+    aryNames.push('木 村');
+    aryNames.push('中 野');
+    aryNames.push('西 村');
+    aryNames.push('上 田');
+    aryNames.push('中 村');
+
+    let i = 0;
+    while (aryNames.length < 10) {
+        aryNames.push(aryNames[i % aryNames.length]);       // iをaryNames.lengthで割った余りをインデックスとして使用
+        i++;
+    }
+
     const container = document.createElement('div');
     container.classList.add('roulette-container');
     container.classList.add('fadein');
 
-    const rouletteElem = document.createElement('div');
-    rouletteElem.classList.add('roulette');
-    rouletteElem.id = 'roulette';
+    const domRouletteNewElem = document.createElement('div');
+    domRouletteNewElem.classList.add('roulette');
+    domRouletteNewElem.id = 'roulette';
 
-    // roulette-containerにrouletteを追加
-    container.appendChild(rouletteElem);
+    container.appendChild(domRouletteNewElem);
 
-    // bodyにcontainerを追加
     document.body.appendChild(container);
 
-    const target: string = "木 村";
-    const roulette: HTMLElement | null = document.getElementById('roulette');
+    const domRoulette: HTMLElement | null = document.getElementById('roulette');
 
     // 名前を動的に生成
-    if (roulette) {
-        namesArray.forEach((name: string, index: number) => {
+    if (domRoulette) 
+    {
+        const colors = ['#f09199', '#20AEE5']; // 色の配列
+        aryNames.forEach((strName: string, index: number) => {
             const nameDiv: HTMLDivElement = document.createElement('div');
             nameDiv.classList.add('name');
-            nameDiv.id = `name${index + 1}`;    // IDを設定
-            nameDiv.textContent = name;         // テキストを設定
-            roulette.appendChild(nameDiv);      // ルーレットに追加
+            nameDiv.id = `name${index + 1}`;
+            nameDiv.textContent = strName;
+            
+            const angle = index * 36; 
+            const colorIndex = index % colors.length;
+            nameDiv.style.transform = `rotateX(${angle}deg) translateZ(500px)`;
+            nameDiv.style.color = colors[colorIndex];
+            
+            domRoulette.appendChild(nameDiv);
         });
     }
 
-
-    let winnerIndex: number = 0;
-    let startTime: number = 0;
-    let animationDuration: number = 0;          // 初期のアニメーション速度
-
-    function updateAnimation(): void {
-        const elapsedTime: number = Date.now() - startTime;
-
-        if (elapsedTime < 3000) 
-        {
-        }
-        else if (elapsedTime < 3500) 
-        {
-            animationDuration = 0.1 * elapsedTime;
-        }
-        else if (elapsedTime < 8000) 
-        {
-            animationDuration = 0.5 + 0.2 * (elapsedTime / 7000);
-        }
-        else if (elapsedTime < 12000) 
-        {
-            animationDuration = 1 + (elapsedTime / 12000);
-        }
-        else if (elapsedTime < 18000) 
-        {
-            animationDuration = 3 + 3 * (elapsedTime / 18000);
-            updateNames(namesArray, target);
-        }
-        else 
-        {
-            if (roulette) 
-            {
-                roulette.style.animation = 'none';
-                const rotationAngle: number = 360 - (winnerIndex * 36); // 当選者の位置に合わせるための回転角度
-                roulette.style.transform = `rotateX(${rotationAngle}deg)`;
-                const names: NodeListOf<HTMLDivElement> = document.querySelectorAll('.name');
-                names[winnerIndex].classList.add('winner');
-                return;
-            }
-        }
-
-        if (roulette) 
-        {
-            roulette.style.animationDuration = `${animationDuration}s`;
-        }
-        requestAnimationFrame(updateAnimation);
-    }
-
-    startTime = Date.now();
-    requestAnimationFrame(updateAnimation);
+    const startTime: number = Date.now();
+    requestAnimationFrame(updateAnimation.bind(null, startTime, domRoulette, aryNames, strTarget)); 
 }
 
-// 名称の更新
-function updateNames(namesArray, target): void {
-    namesArray.fill(target);
+
+// アニメーションの更新
+// 引数：startTime＝開始時間
+// 引数：domRoulette＝DOMルーレット要素
+// 引数：aryNames＝候補者配列
+// 引数：strTarget＝当選者
+function updateAnimation(startTime: number, domRoulette: HTMLElement | null, aryNames: string[], strTarget: string): void 
+{
+    let bReverse: boolean = false;
+    let animationDuration: number = 0;
+    let targetIndex: number = 0;
+    const PassedTime: number = Date.now() - startTime;
+
+    switch (true) 
+    {
+    case PassedTime < 3000:
+        break;
+
+    case PassedTime < 4200:
+        animationDuration = 10;
+        bReverse = true;
+        break;
+
+    case PassedTime < 8000:
+        animationDuration = 0.5 + 0.2 * (PassedTime / 7000);
+        bReverse = false;
+        break;
+
+    case PassedTime < 12000:
+        animationDuration = 1 + (PassedTime / 12000);
+        break;
+
+    case PassedTime < 18000:
+        animationDuration = 3 + 3 * (PassedTime / 18000);
+        updateYaochoNames(aryNames, strTarget);
+        break;
+
+    default:
+        if (domRoulette) 
+        {
+            domRoulette.style.animation = 'none';
+            const rotationAngle: number = 360 + (targetIndex * 36);
+            domRoulette.style.transform = `rotateX(${rotationAngle}deg)`;
+            const names: NodeListOf<HTMLDivElement> = document.querySelectorAll('.name');
+            names[targetIndex].classList.add('winner');
+            return;
+        }
+    }
+
+    if (domRoulette) 
+    {
+        domRoulette.style.animationDuration = `${animationDuration}s`;
+        domRoulette.style.animationDirection = bReverse ? 'reverse' : 'normal';
+    }
+    requestAnimationFrame(updateAnimation.bind(null, startTime, domRoulette, aryNames, strTarget));
+}
+
+
+// 名称の八百長更新
+// 引数：aryNames＝候補者配列
+// 引数：srtTarget＝当選者
+function updateYaochoNames(aryNames: string[], strTarget: string): void 
+{
+    aryNames.fill(strTarget);
     const names: NodeListOf<HTMLDivElement> = document.querySelectorAll('.name');
     names.forEach((nameDiv: HTMLDivElement, index: number) => {
-        nameDiv.textContent = namesArray[index];
+        nameDiv.textContent = aryNames[index];
     });
 }
