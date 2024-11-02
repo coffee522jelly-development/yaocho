@@ -4,10 +4,11 @@ typescript+Viteの構成
 
 Viteを使う場合下記コマンドで
 以下のような検証ができます。
-
+```
 .
 └── yaocho/
     └── my-roulette-app
+```
 
 ```
 npm run dev
