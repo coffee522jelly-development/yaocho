@@ -21,7 +21,10 @@ my-roulette-appのディレクトリで
 ```
 serve -s dist
 ```
-もしくは、npm run preview
+もしくは、
+```
+npm run preview
+```
 
 dist下のローカル検証ができる
 (プロダクションビルドの問題がないかを確認できる。)
